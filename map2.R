@@ -85,4 +85,3 @@ p1 <- p1 + theme(axis.ticks=element_blank())
 p1 <- p1 + theme(axis.text=element_blank())
 p1 <- p1 + scale_fill_gradient(low='gray88', high='royalblue4', labels=percent)
 p1 <- p1 + theme(legend.title=element_blank())
-p1
