@@ -1,0 +1,27 @@
+y = train_df$acqs
+            
+            # Initialize state specification
+            ss <- AddLocalLinearTrend(list(),y) 
+            ss <- AddSeasonal(ss, y, nseasons = 7) # day of week
+
+            # Set priors for betas
+            size = dim(train_df)[2] 
+            prior_spikes <- rep(1, size)
+            prior_sd <- c(rep(1,size))
+            prior_beta <- rep(0, size) 
+
+            x_mat = model.matrix(acqs ~ ., data=train_df)
+            prior <- IndependentSpikeSlabPrior(x = x_mat,
+                                             y = y,
+                                             prior.beta.sd = prior_sd,
+                                             optional.coefficient.estimate = prior_beta,
+                                             prior.inclusion.probabilities = prior_spikes)
+            
+            # create bsts model
+            model <- bsts(formula = acqs ~ .,
+                           state.specification = ss, 
+                           data = train_df,
+                           niter = 3000,
+                           prior = prior,
+                           seed = 2018,
+                           ping = 0)
